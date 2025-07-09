@@ -237,27 +237,11 @@
     <div class="container">
       <h2 class="text-center fw-bold mb-3">Tanya Asisten AI ALOG</h2>
       <p class="text-center text-muted mb-4">Tanyakan seputar layanan kami atau topik kesehatan mental.</p>
-
-      <div class="row justify-content-center">
-        <div class="col-md-8">
-          <div class="card shadow-sm">
-            <div class="card-body d-flex flex-column" style="height: 500px;">
-              <!-- Chat area -->
-              <div id="chat-container" class="flex-grow-1 overflow-auto mb-3" style="border: 1px solid #dee2e6; border-radius: .5rem; padding: 1rem; background-color: #ffffff;">
-                <!-- Chat bubbles akan muncul di sini -->
-                <div class="text-muted text-center">Mulai percakapan dengan asisten AI...</div>
-              </div>
-
-              <!-- Input -->
-              <div class="input-group">
-                <input type="text" id="ai-prompt" class="form-control" placeholder="Ketik pertanyaan Anda di sini...">
-                <button class="btn btn-primary" onclick="tanyaAI()">Kirim</button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+      <script
+          chatbot_id="686e80da587ce98424cad1ee"
+          data-type="default"
+          src="https://app.thinkstack.ai/bot/thinkstackai-loader.min.js">
+    </script>
   </section>
 
     
@@ -291,83 +275,6 @@
     </div>
   </footer>
 
-<!-- Script -->
-<script>
-  async function tanyaAI() {
-    const input = document.getElementById('ai-prompt');
-    const chatContainer = document.getElementById('chat-container');
-    const prompt = input.value.trim();
-    const apiKey = "YOUR_API_KEY_HERE"; // Ganti dengan API Key Gemini kamu
-
-    if (!prompt) {
-      alert("Silakan isi pertanyaan terlebih dahulu.");
-      return;
-    }
-
-    const userBubble = `
-      <div class="d-flex justify-content-end mb-2">
-        <div class="bg-primary text-white p-2 rounded-pill">${prompt}</div>
-      </div>`;
-    chatContainer.innerHTML += userBubble;
-    chatContainer.scrollTop = chatContainer.scrollHeight;
-    input.value = '';
-
-    const loadingBubble = `
-      <div class="d-flex justify-content-start mb-2" id="loading-bubble">
-        <div class="bg-light border text-muted p-2 rounded-pill">Sedang berpikir...</div>
-      </div>`;
-    chatContainer.innerHTML += loadingBubble;
-    chatContainer.scrollTop = chatContainer.scrollHeight;
-
-    try {
-      const res = await fetch(
-        `https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${apiKey}`,
-        {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            contents: [{ parts: [{ text: prompt }] }]
-          })
-        }
-      );
-
-      const data = await res.json();
-      const jawaban = data.candidates?.[0]?.content?.parts?.[0]?.text || "Maaf, tidak ada jawaban yang bisa diberikan.";
-
-      document.getElementById('loading-bubble').remove();
-
-      const aiBubble = `
-        <div class="d-flex justify-content-start mb-2">
-          <div class="bg-light border p-2 rounded-pill">${jawaban.replace(/\n/g, "<br>")}</div>
-        </div>`;
-      chatContainer.innerHTML += aiBubble;
-      chatContainer.scrollTop = chatContainer.scrollHeight;
-
-    } catch (err) {
-      console.error(err);
-      document.getElementById('loading-bubble').remove();
-      chatContainer.innerHTML += `
-        <div class="d-flex justify-content-start mb-2">
-          <div class="bg-warning text-dark p-2 rounded-pill">Terjadi kesalahan. Silakan coba lagi.</div>
-        </div>`;
-      chatContainer.scrollTop = chatContainer.scrollHeight;
-    }
-  }
-
-  // Agar Enter bisa mengirim
-  window.onload = function () {
-    document.getElementById("ai-prompt").addEventListener("keydown", function (e) {
-      if (e.key === "Enter") {
-        e.preventDefault();
-        tanyaAI();
-      }
-    });
-  };
-</script>
-
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-
-  
   <!-- Bootstrap JS -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
