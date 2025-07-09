@@ -45,8 +45,11 @@
                 <div id="timer" class="display-5 fw-bold mb-4">Sisa waktu: 30:00</div>
                 <div class="d-flex justify-content-center gap-3 controls">
                     <button class="btn btn-mute" title="Mute"><i class="bi bi-mic-mute-fill"></i></button>
-                    <button class="btn btn-notes" title="Catatan"><i class="bi bi-clipboard2-fill"></i></button>
+                    <button class="btn btn-notes" title="Catatan" onclick="toggleCatatan()"><i class="bi bi-clipboard2-fill"></i></button>
                     <button class="btn btn-end" title="Akhiri" onclick="akhiriSesi()"><i class="bi bi-telephone-x-fill"></i></button>
+                </div>
+                <div id="note-area" class="mt-4" style="display: none;">
+                    <textarea class="form-control" rows="5" placeholder="Tulis catatan Anda di sini..."></textarea>
                 </div>
             </div>
         </div>
@@ -76,6 +79,11 @@
 
     <!-- Timer Countdown -->
     <script>
+        function toggleCatatan() {
+        const noteArea = document.getElementById('note-area');
+        noteArea.style.display = noteArea.style.display === 'none' ? 'block' : 'none';
+        }
+
         let totalSeconds = 30 * 60;
 
         function updateTimer() {
