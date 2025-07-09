@@ -29,49 +29,19 @@
     </div>
   </nav>
 
-  <!-- Chat Panel -->
-  <main class="d-flex flex-column" style="min-height: 90vh;">
-    <!-- Header Chat -->
-    <header class="d-flex align-items-center justify-content-between p-3 border-bottom bg-white">
-      <div class="d-flex align-items-center gap-2">
-        <img src="https://i.pravatar.cc/150?u=psikolog" alt="Avatar Dokter" class="rounded-circle" width="40" height="40"/>
-        <div>
-          <div class="fw-semibold">Dr. Citra</div>
-          <small class="text-success">Online</small>
-        </div>
-      </div>
-      <div class="text-end">
-        <span class="fw-semibold me-3" id="timer">Sisa waktu: 30:00</span>
-        <button class="btn btn-sm btn-outline-danger" onclick="akhiriSesi()">Akhiri Sesi</button>
-      </div>
-    </header>
+  <!-- Section Chatbot AI Thinkstack -->
+  <main class="py-5" style="min-height: 90vh;">
+    <div class="container text-center">
+      <h2 class="fw-bold mb-3">Sesi Konsultasi AI</h2>
+      <p class="text-muted mb-4">Tanyakan apa pun seputar kesehatan mental kepada asisten AI kami.</p>
 
-    <!-- Chat Area -->
-    <div class="p-3 overflow-auto" id="chatArea" style="background-color: #f2f2f2; height: calc(100vh - 250px);">
-      <!-- Pesan dari Anda -->
-      <div class="d-flex justify-content-end mb-3">
-        <div class="text-end">
-          <div class="fw-semibold">Anda <small class="text-muted">21:15</small></div>
-          <div class="bg-primary text-white rounded p-2 mt-1">Selamat malam, Dok.</div>
-        </div>
-      </div>
-
-      <!-- Pesan dari Dokter -->
-      <div class="d-flex mb-3">
-        <div>
-          <div class="fw-semibold">Dr. Citra <small class="text-muted">21:16</small></div>
-          <div class="bg-light border rounded p-2 mt-1">Selamat malam, Budi. Bagaimana perasaan Anda hari ini?</div>
-        </div>
-      </div>
+      <!-- Script Chatbot -->
+      <script
+        chatbot_id="686e80da587ce98424cad1ee"
+        data-type="default"
+        src="https://app.thinkstack.ai/bot/thinkstackai-loader.min.js">
+      </script>
     </div>
-
-    <!-- Input -->
-    <footer class="p-3 border-top bg-white">
-      <form class="d-flex gap-2" onsubmit="kirimPesan(); return false;">
-        <input type="text" id="inputPesan" class="form-control" placeholder="Ketik pesan untuk Dr. Citra..." required />
-        <button type="submit" class="btn btn-primary">Kirim</button>
-      </form>
-    </footer>
   </main>
 
   <!-- Footer -->
@@ -95,77 +65,5 @@
 
   <!-- Bootstrap JS -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-
-  <!-- Timer & Chat Script -->
-<script>
-  let totalSeconds = 30 * 60;
-  const timerInterval = setInterval(updateTimer, 1000);
-
-  function updateTimer() {
-    const minutes = String(Math.floor(totalSeconds / 60)).padStart(2, '0');
-    const seconds = String(totalSeconds % 60).padStart(2, '0');
-    document.getElementById('timer').textContent = `Sisa waktu: ${minutes}:${seconds}`;
-    if (totalSeconds > 0) {
-      totalSeconds--;
-    } else {
-      clearInterval(timerInterval);
-      alert('Waktu sesi telah habis.');
-    }
-  }
-
-  function akhiriSesi() {
-    if (confirm("Apakah Anda yakin ingin mengakhiri sesi?")) {
-      alert("Sesi telah diakhiri.");
-    }
-  }
-
-  const balasanAI = [
-    "Bisa kamu ceritakan lebih lanjut?",
-    "Bagaimana perasaanmu setelah kejadian itu?",
-    "Itu hal yang wajar dirasakan.",
-    "Saya di sini untuk membantu, tenang saja.",
-    "Mari kita coba telaah bersama.",
-    "Silakan ceritakan dengan tenang, saya mendengarkan.",
-    "Apa yang membuat kamu merasa seperti itu?",
-    "Saya mengerti, dan kamu tidak sendirian."
-  ];
-
-  function kirimPesan() {
-    const input = document.getElementById("inputPesan");
-    const pesan = input.value.trim();
-    if (pesan === "") return;
-
-    const chatArea = document.getElementById("chatArea");
-    const time = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-
-    const userBubble = `
-      <div class="d-flex justify-content-end mb-3">
-        <div class="text-end">
-          <div class="fw-semibold">Anda <small class="text-muted">${time}</small></div>
-          <div class="bg-primary text-white rounded p-2 mt-1">${pesan}</div>
-        </div>
-      </div>
-    `;
-    chatArea.insertAdjacentHTML('beforeend', userBubble);
-    chatArea.scrollTop = chatArea.scrollHeight;
-    input.value = "";
-
-    setTimeout(() => {
-      const respon = balasanAI[Math.floor(Math.random() * balasanAI.length)];
-      const aiBubble = `
-        <div class="d-flex mb-3">
-          <div>
-            <div class="fw-semibold">Dr. Citra <small class="text-muted">${new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</small></div>
-            <div class="bg-light border rounded p-2 mt-1">${respon}</div>
-          </div>
-        </div>
-      `;
-      chatArea.insertAdjacentHTML('beforeend', aiBubble);
-      chatArea.scrollTop = chatArea.scrollHeight;
-    }, 1000);
-  }
-</script>
-
-
 </body>
 </html>
