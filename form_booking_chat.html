@@ -203,8 +203,16 @@
       return;
     }
 
+    // Konversi tanggal ke format hari, tanggal lokal
+    const hariIndo = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
+    const hari = hariIndo[selectedDate.getDay()];
+
+    const optionsTanggal = { day: 'numeric', month: 'long', year: 'numeric' };
+    const tanggalFormatted = selectedDate.toLocaleDateString('id-ID', optionsTanggal);
+
+    // Output ke elemen konfirmasi
     document.getElementById('namaOut').textContent = nama;
-    document.getElementById('tanggalOut').textContent = tanggal + " (" + jadwal.value + ")";
+    document.getElementById('tanggalOut').textContent = `${hari}, ${tanggalFormatted} (${jadwal.value})`;
     document.getElementById('emailOut').textContent = email;
 
     const konfirmasi = document.getElementById('konfirmasi');
@@ -212,6 +220,7 @@
     konfirmasi.scrollIntoView({ behavior: 'smooth' });
   });
 </script>
+
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
