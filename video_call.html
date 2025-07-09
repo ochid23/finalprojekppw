@@ -52,11 +52,13 @@
                             </div>
                             <div class="d-flex justify-content-center gap-3 mt-4">
                                 <button class="btn btn-circle btn-yellow" title="Mute"><i class="bi bi-mic-mute-fill"></i></button>
-                                <button class="btn btn-circle btn-grey" title="Catatan"><i class="bi bi-clipboard2-fill"></i></button>
-                                <button class="btn btn-circle btn-red" title="Akhiri" onclick="akhiriSesi()">
-                                    <i class="bi bi-telephone-x-fill"></i>
-                                </button>
+                                <button class="btn btn-circle btn-grey" title="Catatan" onclick="toggleCatatan()"><i class="bi bi-clipboard2-fill"></i></button>
+                                <button class="btn btn-circle btn-red" title="Akhiri" onclick="akhiriSesi()"><i class="bi bi-telephone-x-fill"></i></button>
                             </div>
+                            <div id="note-area" class="mt-4" style="display: none;">
+                                <textarea class="form-control" rows="5" placeholder="Tulis catatan Anda di sini..."></textarea>
+                            </div>
+
                         </div>
 
                     </div>
@@ -89,6 +91,11 @@
 
     <!-- TIMER SCRIPT -->
     <script>
+        function toggleCatatan() {
+        const noteArea = document.getElementById('note-area');
+        noteArea.style.display = noteArea.style.display === 'none' ? 'block' : 'none';
+        }
+
         let totalSeconds = 30 * 60;
 
         function updateTimer() {
