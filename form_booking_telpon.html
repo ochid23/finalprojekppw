@@ -94,34 +94,9 @@
                   </thead>
                   <tbody>
                     <tr>
-                      <td>Senin</td>
                       <td><input type="radio" name="jadwal" value="Senin 09.00"> 09.00</td>
                       <td><input type="radio" name="jadwal" value="Senin 13.00"> 13.00</td>
                       <td><input type="radio" name="jadwal" value="Senin 18.30"> 18.30</td>
-                    </tr>
-                    <tr>
-                      <td>Selasa</td>
-                      <td><input type="radio" name="jadwal" value="Selasa 09.00"> 09.00</td>
-                      <td><input type="radio" name="jadwal" value="Selasa 13.00"> 13.00</td>
-                      <td><input type="radio" name="jadwal" value="Selasa 19.00"> 19.00</td>
-                    </tr>
-                    <tr>
-                      <td>Rabu</td>
-                      <td><input type="radio" name="jadwal" value="Rabu 09.00"> 09.00</td>
-                      <td><input type="radio" name="jadwal" value="Rabu 13.00"> 13.00</td>
-                      <td><input type="radio" name="jadwal" value="Rabu 18.30"> 18.30</td>
-                    </tr>
-                    <tr>
-                      <td>Kamis</td>
-                      <td><input type="radio" name="jadwal" value="Kamis 09.00"> 09.00</td>
-                      <td><input type="radio" name="jadwal" value="Kamis 13.00"> 13.00</td>
-                      <td><input type="radio" name="jadwal" value="Kamis 19.00"> 19.00</td>
-                    </tr>
-                    <tr>
-                      <td>Jumat</td>
-                      <td><input type="radio" name="jadwal" value="Jumat 09.00"> 09.00</td>
-                      <td><input type="radio" name="jadwal" value="Jumat 13.00"> 13.00</td>
-                      <td><input type="radio" name="jadwal" value="Jumat 18.00"> 18.00</td>
                     </tr>
                   </tbody>
                 </table>
@@ -228,8 +203,16 @@
       return;
     }
 
+    // Konversi tanggal ke format hari, tanggal lokal
+    const hariIndo = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
+    const hari = hariIndo[selectedDate.getDay()];
+
+    const optionsTanggal = { day: 'numeric', month: 'long', year: 'numeric' };
+    const tanggalFormatted = selectedDate.toLocaleDateString('id-ID', optionsTanggal);
+
+    // Output ke elemen konfirmasi
     document.getElementById('namaOut').textContent = nama;
-    document.getElementById('tanggalOut').textContent = tanggal + " (" + jadwal.value + ")";
+    document.getElementById('tanggalOut').textContent = `${hari}, ${tanggalFormatted} (${jadwal.value})`;
     document.getElementById('emailOut').textContent = email;
 
     const konfirmasi = document.getElementById('konfirmasi');
