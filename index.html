@@ -291,61 +291,83 @@
     </div>
   </footer>
 
+  <!-- Script -->
   <script>
     async function tanyaAI() {
-      const inputPrompt = document.getElementById('ai-prompt');
-      const prompt = inputPrompt.value.trim();
-      const divResponsAI = document.getElementById('ai-response');
-
-      const apiKey = "AIzaSyAiSZ5hzj3gufLLGZU0_Nau4jN2ZqSKjgw";
+      const input = document.getElementById('ai-prompt');
+      const chatContainer = document.getElementById('chat-container');
+      const prompt = input.value.trim();
+      const apiKey = AIzaSyAiSZ5hzj3gufLLGZU0_Nau4jN2ZqSKjgw; // Ganti dengan API key asli jika digunakan
 
       if (!prompt) {
-        alert("Silakan masukkan pertanyaan.");
+        alert("Silakan isi pertanyaan terlebih dahulu.");
         return;
       }
 
-      divResponsAI.innerHTML = "🧠 Sedang berpikir...";
+      // Tampilkan pertanyaan user
+      const userBubble = `
+        <div class="d-flex justify-content-end mb-2">
+          <div class="bg-primary text-white p-2 rounded-pill">${prompt}</div>
+        </div>`;
+      chatContainer.innerHTML += userBubble;
+      chatContainer.scrollTop = chatContainer.scrollHeight;
+
+      input.value = '';
+
+      // Tampilkan status "Sedang berpikir..."
+      const loadingBubble = `
+        <div class="d-flex justify-content-start mb-2" id="loading-bubble">
+          <div class="bg-light border text-muted p-2 rounded-pill">Sedang berpikir...</div>
+        </div>`;
+      chatContainer.innerHTML += loadingBubble;
+      chatContainer.scrollTop = chatContainer.scrollHeight;
 
       try {
-        const response = await fetch(
+        const res = await fetch(
           `https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${apiKey}`,
           {
             method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
+            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-              contents: [{
-                parts: [{ text: prompt }]
-              }]
+              contents: [{ parts: [{ text: prompt }] }]
             })
           }
         );
 
-        if (!response.ok) {
-          throw new Error('Respon dari server gagal.');
-        }
+        const data = await res.json();
+        const jawaban = data.candidates?.[0]?.content?.parts?.[0]?.text || "Maaf, tidak ada jawaban yang bisa diberikan.";
 
-        const data = await response.json();
-        const teksAI = data.candidates?.[0]?.content?.parts?.[0]?.text || "❌ Tidak ada respon dari AI.";
-        divResponsAI.innerHTML = teksAI.replace(/\n/g, "<br>");
+        // Hapus loading
+        document.getElementById('loading-bubble').remove();
 
-      } catch (error) {
-        console.error('Terjadi kesalahan:', error);
-        divResponsAI.innerHTML = "⚠️ Maaf, terjadi kesalahan. Silakan coba lagi nanti.";
+        // Tampilkan jawaban AI
+        const aiBubble = `
+          <div class="d-flex justify-content-start mb-2">
+            <div class="bg-light border p-2 rounded-pill">${jawaban.replace(/\n/g, "<br>")}</div>
+          </div>`;
+        chatContainer.innerHTML += aiBubble;
+        chatContainer.scrollTop = chatContainer.scrollHeight;
+
+      } catch (err) {
+        console.error(err);
+        document.getElementById('loading-bubble').remove();
+        chatContainer.innerHTML += `
+          <div class="d-flex justify-content-start mb-2">
+            <div class="bg-warning text-dark p-2 rounded-pill">Terjadi kesalahan. Silakan coba lagi.</div>
+          </div>`;
+        chatContainer.scrollTop = chatContainer.scrollHeight;
       }
-
-      inputPrompt.value = '';
     }
 
-    // Fitur: Tekan Enter untuk submit
-    document.getElementById("ai-prompt").addEventListener("keydown", function(event) {
-      if (event.key === "Enter") {
-        event.preventDefault();
+    // Enter untuk kirim
+    document.getElementById("ai-prompt").addEventListener("keydown", function(e) {
+      if (e.key === "Enter") {
+        e.preventDefault();
         tanyaAI();
       }
     });
   </script>
+
   
   <!-- Bootstrap JS -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
