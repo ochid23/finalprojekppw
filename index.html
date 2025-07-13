@@ -234,12 +234,42 @@
       </div>
 
       <!-- Ai asisten -->
-        <script
+         <style>
+  .chat-prompt-bubble {
+    /* Style dasar untuk gelembung */
+    position: relative;
+    background-color: #ffffff;
+    color: #333;
+    padding: 10px 16px;
+    border-radius: 16px;
+    margin-right: 60px; /* Jarak antara teks dan ikon chatbot */
+    font-size: 16px;
+    font-family: 'Poppins', sans-serif; /* Menyesuaikan dengan font website */
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15); /* Bayangan agar terlihat menonjol */
+  }
+
+  /* 2. CSS untuk membuat "ekor" pada gelembung */
+  .chat-prompt-bubble::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    right: -10px; /* Posisi ekor di luar gelembung */
+    transform: translateY(-50%);
+    border: 5px solid transparent;
+    border-left-color: #ffffff; /* Warna harus sama dengan latar belakang gelembung */
+  }
+</style>
+
+<div style="display: flex; align-items: center; justify-content: flex-end; position: fixed; bottom: 5px; right: 20px; z-index: 1000;">
+      
+      <p class="chat-prompt-bubble">chat untuk informasi lebih lanjut</p>
+      
+      <script
       chatbot_id="686e80da587ce98424cad1ee"
       data-type="default"
       src="https://app.thinkstack.ai/bot/thinkstackai-loader.min.js"
       ></script>
-
+</div>
     
     <!-- Disclaimer -->
     <section class="text-white text-start py-5 px-4" style="background-color: #e05a58;">
