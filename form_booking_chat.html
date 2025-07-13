@@ -21,6 +21,15 @@
       display: block;
       opacity: 1;
     }
+    .booked {
+  color: #adb5bd; /* Warna abu-abu */
+  text-decoration: line-through; /* Coret teks */
+  cursor: not-allowed; /* Ubah kursor saat dihover */
+}
+
+.booked input {
+  cursor: not-allowed;
+}
   </style>
 </head>
 <body>
@@ -81,27 +90,6 @@
                   <label for="tanggal" class="form-label">Tanggal Konsultasi</label>
                   <input type="date" class="form-control" id="tanggal" required>
                 </div>
-
-                <div class="table-responsive mb-3">
-                <table class="table table-bordered text-center align-middle">
-                  <thead class="table-primary">
-                    <tr>
-                      <th>Sesi Pagi</th>
-                      <th>Sesi Siang</th>
-                      <th>Sesi Malam</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td><input type="radio" name="jadwal" value="09.00"> 09.00</td>
-                      <td><input type="radio" name="jadwal" value="13.00"> 13.00</td>
-                      <td><input type="radio" name="jadwal" value="18.30"> 18.30</td>
-                    </tr>
-                    <tr>
-                  </tbody>
-                </table>
-              </div>
-
 
                 <div class="mb-3">
                   <label for="pembayaran" class="form-label">Metode Pembayaran</label>
@@ -173,6 +161,105 @@
 </footer>
   <!-- Script -->
 <script>
+
+//===========================================================
+ // --- AWAL BAGIAN BARU ---
+
+  // 1. Data Simulasi Jadwal yang Sudah Terisi (Contoh)
+  // Formatnya: 'YYYY-MM-DD': ['jam', 'jam']
+  const bookedSlots = {
+    '2025-07-15': ['09.00', '18.30'], // Tanggal 15 Juli, jam 09.00 & 18.30 terisi
+    '2025-07-16': ['13.00'],          // Tanggal 16 Juli, jam 13.00 terisi
+    '2025-07-18': ['09.00', '13.00', '18.30'] // Tanggal 18 Juli, semua sesi terisi
+  };
+
+  const dateInput = document.getElementById('tanggal');
+  const timeSlots = document.querySelectorAll('input[name="jadwal"]');
+
+  // 2. Fungsi untuk memperbarui ketersediaan jadwal
+  function updateAvailability() {
+    const selectedDate = dateInput.value;
+    const slotsForDate = bookedSlots[selectedDate] || []; // Ambil jadwal terisi, atau array kosong jika tanggal bebas
+
+    timeSlots.forEach(slot => {
+      const label = slot.parentElement; // Ambil elemen <label> pembungkusnya
+      const isBooked = slotsForDate.includes(slot.value);
+
+      if (isBooked) {
+        slot.disabled = true; // Nonaktifkan radio button
+        if (slot.checked) {
+          slot.checked = false; // Batalkan pilihan jika slot ini sedang dipilih
+        }
+        label.classList.add('booked'); // Tambahkan class 'booked' untuk styling
+      } else {
+        slot.disabled = false; // Aktifkan radio button
+        label.classList.remove('booked'); // Hapus class 'booked'
+      }
+    });
+  }
+
+  // 3. Panggil fungsi saat tanggal berubah atau form di-reset
+  dateInput.addEventListener('change', updateAvailability);
+  document.getElementById('bookingForm').addEventListener('reset', () => {
+    // Beri sedikit jeda agar form selesai di-reset sebelum memperbarui
+    setTimeout(updateAvailability, 0);
+  });
+  
+  // Panggil sekali saat halaman dimuat untuk inisialisasi
+  updateAvailability();
+
+  // --- AKHIR BAGIAN BARU ---
+//==================================================================
+
+  // Kode form submission Anda (tidak ada perubahan di sini)
+  document.getElementById('bookingForm').addEventListener('submit', function (e) {
+    e.preventDefault();
+
+    const nama = document.getElementById('nama').value.trim();
+    const email = document.getElementById('email').value.trim();
+    const tanggal = document.getElementById('tanggal').value;
+    const jadwal = document.querySelector('input[name="jadwal"]:checked');
+
+    // Validasi email @students.amikom.ac.id
+    const emailPattern = /^[a-zA-Z0-9._%+-]+@students\.amikom\.ac\.id$/;
+    if (!emailPattern.test(email)) {
+      alert('Gunakan email @students.amikom.ac.id yang valid.');
+      return;
+    }
+
+    // Validasi tanggal tidak boleh di masa lalu
+    const today = new Date();
+    const selectedDate = new Date(tanggal);
+    today.setHours(0, 0, 0, 0);
+
+    if (selectedDate < today) {
+      alert('Tanggal konsultasi tidak boleh di masa lalu.');
+      return;
+    }
+
+    if (!jadwal) {
+      alert('Silakan pilih jadwal konsultasi yang tersedia.');
+      return;
+    }
+
+    // Konversi tanggal ke format hari, tanggal lokal
+    const hariIndo = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
+    const hari = hariIndo[selectedDate.getDay()];
+
+    const optionsTanggal = { day: 'numeric', month: 'long', year: 'numeric' };
+    const tanggalFormatted = selectedDate.toLocaleDateString('id-ID', optionsTanggal);
+
+    // Output ke elemen konfirmasi
+    document.getElementById('namaOut').textContent = nama;
+    document.getElementById('tanggalOut').textContent = `${hari}, ${tanggalFormatted} (${jadwal.value})`;
+    document.getElementById('emailOut').textContent = email;
+
+    const konfirmasi = document.getElementById('konfirmasi');
+    konfirmasi.classList.add('show');
+    konfirmasi.scrollIntoView({ behavior: 'smooth' });
+  });
+
+
   document.getElementById('bookingForm').addEventListener('submit', function (e) {
     e.preventDefault();
 
