@@ -21,6 +21,16 @@
       display: block;
       opacity: 1;
     }
+
+      .booked {
+  color: #adb5bd;
+  text-decoration: line-through;
+  cursor: not-allowed;
+}
+
+.booked input {
+  cursor: not-allowed;
+}
   </style>
 </head>
 <body>
@@ -83,23 +93,30 @@
                 </div>
 
                 <div class="table-responsive mb-3">
-                <table class="table table-bordered text-center align-middle">
-                  <thead class="table-primary">
-                    <tr>
-                      <th>Sesi Pagi</th>
-                      <th>Sesi Siang</th>
-                      <th>Sesi Malam</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td><input type="radio" name="jadwal" value="09.00"> 09.00</td>
-                      <td><input type="radio" name="jadwal" value="13.00"> 13.00</td>
-                      <td><input type="radio" name="jadwal" value="18.30"> 18.30</td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
+  <p class="form-label mb-1">Pilih Jam Konsultasi (berdasarkan tanggal yang dipilih):</p>
+  <table class="table table-bordered text-center align-middle">
+    <thead class="table-primary">
+      <tr>
+        <th>Sesi Pagi</th>
+        <th>Sesi Siang</th>
+        <th>Sesi Malam</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>
+          <label><input type="radio" name="jadwal" value="09.00"> 09.00</label>
+        </td>
+        <td>
+          <label><input type="radio" name="jadwal" value="13.00"> 13.00</label>
+        </td>
+        <td>
+          <label><input type="radio" name="jadwal" value="18.30"> 18.30</label>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
 
 
                 <div class="mb-3">
@@ -172,6 +189,43 @@
 </footer>
   <!-- Script -->
 <script>
+  const bookedSlots = {
+    '2025-07-15': ['09.00', '18.30'], 
+    '2025-07-16': ['13.00'],
+    '2025-07-18': ['09.00', '13.00', '18.30']
+  };
+
+  const dateInput = document.getElementById('tanggal');
+  const timeSlots = document.querySelectorAll('input[name="jadwal"]');
+
+  function updateAvailability() {
+    const selectedDate = dateInput.value;
+    const slotsForDate = bookedSlots[selectedDate] || [];
+
+    timeSlots.forEach(slot => {
+      const label = slot.parentElement; 
+      const isBooked = slotsForDate.includes(slot.value);
+
+      if (isBooked) {
+        slot.disabled = true;
+        if (slot.checked) {
+          slot.checked = false;
+        }
+        label.classList.add('booked');
+      } else {
+        slot.disabled = false;
+        label.classList.remove('booked');
+      }
+    });
+  }
+
+  dateInput.addEventListener('change', updateAvailability);
+  document.getElementById('bookingForm').addEventListener('reset', () => {
+    setTimeout(updateAvailability, 0);
+  });
+  
+  updateAvailability();
+
   document.getElementById('bookingForm').addEventListener('submit', function (e) {
     e.preventDefault();
 
@@ -180,14 +234,12 @@
     const tanggal = document.getElementById('tanggal').value;
     const jadwal = document.querySelector('input[name="jadwal"]:checked');
 
-    // Validasi email @students.amikom.ac.id
     const emailPattern = /^[a-zA-Z0-9._%+-]+@students\.amikom\.ac\.id$/;
     if (!emailPattern.test(email)) {
       alert('Gunakan email @students.amikom.ac.id yang valid.');
       return;
     }
 
-    // Validasi tanggal tidak boleh di masa lalu
     const today = new Date();
     const selectedDate = new Date(tanggal);
     today.setHours(0, 0, 0, 0);
@@ -198,18 +250,16 @@
     }
 
     if (!jadwal) {
-      alert('Silakan pilih jadwal konsultasi.');
+      alert('Silakan pilih jadwal konsultasi yang tersedia.');
       return;
     }
 
-    // Konversi tanggal ke format hari, tanggal lokal
     const hariIndo = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
     const hari = hariIndo[selectedDate.getDay()];
 
     const optionsTanggal = { day: 'numeric', month: 'long', year: 'numeric' };
     const tanggalFormatted = selectedDate.toLocaleDateString('id-ID', optionsTanggal);
 
-    // Output ke elemen konfirmasi
     document.getElementById('namaOut').textContent = nama;
     document.getElementById('tanggalOut').textContent = `${hari}, ${tanggalFormatted} (${jadwal.value})`;
     document.getElementById('emailOut').textContent = email;
