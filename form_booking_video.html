@@ -22,15 +22,15 @@
       opacity: 1;
     }
 
-      .booked {
-  color: #adb5bd;
-  text-decoration: line-through;
-  cursor: not-allowed;
-}
+    .booked {
+      color: #adb5bd;
+      text-decoration: line-through;
+      cursor: not-allowed;
+    }
 
-.booked input {
-  cursor: not-allowed;
-}
+    .booked input {
+      cursor: not-allowed;
+    }
   </style>
 </head>
 <body>
@@ -93,31 +93,24 @@
                 </div>
 
                 <div class="table-responsive mb-3">
-  <p class="form-label mb-1">Pilih Jam Konsultasi (berdasarkan tanggal yang dipilih):</p>
-  <table class="table table-bordered text-center align-middle">
-    <thead class="table-primary">
-      <tr>
-        <th>Sesi Pagi</th>
-        <th>Sesi Siang</th>
-        <th>Sesi Malam</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td>
-          <label><input type="radio" name="jadwal" value="09.00"> 09.00</label>
-        </td>
-        <td>
-          <label><input type="radio" name="jadwal" value="13.00"> 13.00</label>
-        </td>
-        <td>
-          <label><input type="radio" name="jadwal" value="18.30"> 18.30</label>
-        </td>
-      </tr>
-    </tbody>
-  </table>
-</div>
-
+                  <p class="form-label mb-1">Pilih Jam Konsultasi (berdasarkan tanggal yang dipilih):</p>
+                  <table class="table table-bordered text-center align-middle">
+                    <thead class="table-primary">
+                      <tr>
+                        <th>Sesi Pagi</th>
+                        <th>Sesi Siang</th>
+                        <th>Sesi Malam</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td><label><input type="radio" name="jadwal" value="09.00"> 09.00</label></td>
+                        <td><label><input type="radio" name="jadwal" value="13.00"> 13.00</label></td>
+                        <td><label><input type="radio" name="jadwal" value="18.30"> 18.30</label></td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
 
                 <div class="mb-3">
                   <label for="pembayaran" class="form-label">Metode Pembayaran</label>
@@ -169,108 +162,105 @@
 
   <!-- Footer -->
   <footer class="bg-light border-top mt-5 pt-4 pb-3">
-  <div class="container">
-    <div class="row align-items-center text-center text-md-start">
-      
-      <div class="col-md-6 mb-3 mb-md-0">
-        <h5 class="fw-bold text-primary mb-1">ALOG | Amikom Psikolog</h5>
-        <p class="text-muted small mb-0">Dukungan psikologis terpercaya untuk mahasiswa Universitas Amikom Yogyakarta.</p>
-      </div>
-      
-      <div class="col-md-6 text-md-end">
-        <ul class="list-inline mb-2">
-          <li class="list-inline-item"><a href="#hero" class="text-decoration-none text-muted small">Beranda</a></li>
-          <li class="list-inline-item"><a href="layanan.html" class="text-decoration-none text-muted small">Booking</a></li>
-        </ul>
-        <p class="text-muted small mb-0">&copy; 2025 ALOG - Universitas Amikom Yogyakarta</p>
+    <div class="container">
+      <div class="row align-items-center text-center text-md-start">
+        <div class="col-md-6 mb-3 mb-md-0">
+          <h5 class="fw-bold text-primary mb-1">ALOG | Amikom Psikolog</h5>
+          <p class="text-muted small mb-0">Dukungan psikologis terpercaya untuk mahasiswa Universitas Amikom Yogyakarta.</p>
+        </div>
+        <div class="col-md-6 text-md-end">
+          <ul class="list-inline mb-2">
+            <li class="list-inline-item"><a href="index.html" class="text-decoration-none text-muted small">Beranda</a></li>
+            <li class="list-inline-item"><a href="layanan.html" class="text-decoration-none text-muted small">Booking</a></li>
+          </ul>
+          <p class="text-muted small mb-0">&copy; 2025 ALOG - Universitas Amikom Yogyakarta</p>
+        </div>
       </div>
     </div>
-  </div>
-</footer>
+  </footer>
+
   <!-- Script -->
-<script>
-const bookedSlots = {
-  '2025-07-22': ['10.00'],                  
-  '2025-07-23': ['13.00'],                  
-  '2025-07-24': ['09.00'],                  
-  '2025-07-25': ['14.00'],                  
-  '2025-07-26': ['10.00']                 
-};
+  <script>
+    const bookedSlots = {
+      '2025-07-22': ['09.00'],
+      '2025-07-23': ['13.00'],
+      '2025-07-24': ['18.30'],
+      '2025-07-25': ['13.00'],
+      '2025-07-26': ['09.00']
+    };
 
-  const dateInput = document.getElementById('tanggal');
-  const timeSlots = document.querySelectorAll('input[name="jadwal"]');
+    const dateInput = document.getElementById('tanggal');
+    const timeSlots = document.querySelectorAll('input[name="jadwal"]');
 
-  function updateAvailability() {
-    const selectedDate = dateInput.value;
-    const slotsForDate = bookedSlots[selectedDate] || [];
+    function updateAvailability() {
+      const selectedDate = dateInput.value;
+      const slotsForDate = bookedSlots[selectedDate] || [];
 
-    timeSlots.forEach(slot => {
-      const label = slot.parentElement; 
-      const isBooked = slotsForDate.includes(slot.value);
+      timeSlots.forEach(slot => {
+        const label = slot.parentElement;
+        const isBooked = slotsForDate.includes(slot.value);
 
-      if (isBooked) {
-        slot.disabled = true;
-        if (slot.checked) {
-          slot.checked = false;
+        if (isBooked) {
+          slot.disabled = true;
+          if (slot.checked) slot.checked = false;
+          label.classList.add('booked');
+        } else {
+          slot.disabled = false;
+          label.classList.remove('booked');
         }
-        label.classList.add('booked');
-      } else {
-        slot.disabled = false;
-        label.classList.remove('booked');
-      }
+      });
+    }
+
+    dateInput.addEventListener('change', updateAvailability);
+    document.getElementById('bookingForm').addEventListener('reset', () => {
+      setTimeout(updateAvailability, 0);
     });
-  }
 
-  dateInput.addEventListener('change', updateAvailability);
-  document.getElementById('bookingForm').addEventListener('reset', () => {
-    setTimeout(updateAvailability, 0);
-  });
-  
-  updateAvailability();
+    updateAvailability();
 
-  document.getElementById('bookingForm').addEventListener('submit', function (e) {
-    e.preventDefault();
+    document.getElementById('bookingForm').addEventListener('submit', function (e) {
+      e.preventDefault();
 
-    const nama = document.getElementById('nama').value.trim();
-    const email = document.getElementById('email').value.trim();
-    const tanggal = document.getElementById('tanggal').value;
-    const jadwal = document.querySelector('input[name="jadwal"]:checked');
+      const nama = document.getElementById('nama').value.trim();
+      const email = document.getElementById('email').value.trim();
+      const tanggal = document.getElementById('tanggal').value;
+      const jadwal = document.querySelector('input[name="jadwal"]:checked');
 
-    const emailPattern = /^[a-zA-Z0-9._%+-]+@students\.amikom\.ac\.id$/;
-    if (!emailPattern.test(email)) {
-      alert('Gunakan email @students.amikom.ac.id yang valid.');
-      return;
-    }
+      const emailPattern = /^[a-zA-Z0-9._%+-]+@students\.amikom\.ac\.id$/;
+      if (!emailPattern.test(email)) {
+        alert('Gunakan email @students.amikom.ac.id yang valid.');
+        return;
+      }
 
-    const today = new Date();
-    const selectedDate = new Date(tanggal);
-    today.setHours(0, 0, 0, 0);
+      const today = new Date();
+      const selectedDate = new Date(tanggal);
+      today.setHours(0, 0, 0, 0);
 
-    if (selectedDate < today) {
-      alert('Tanggal konsultasi tidak boleh di masa lalu.');
-      return;
-    }
+      if (selectedDate < today) {
+        alert('Tanggal konsultasi tidak boleh di masa lalu.');
+        return;
+      }
 
-    if (!jadwal) {
-      alert('Silakan pilih jadwal konsultasi yang tersedia.');
-      return;
-    }
+      if (!jadwal) {
+        alert('Silakan pilih jadwal konsultasi yang tersedia.');
+        return;
+      }
 
-    const hariIndo = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
-    const hari = hariIndo[selectedDate.getDay()];
+      const hariIndo = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
+      const hari = hariIndo[selectedDate.getDay()];
 
-    const optionsTanggal = { day: 'numeric', month: 'long', year: 'numeric' };
-    const tanggalFormatted = selectedDate.toLocaleDateString('id-ID', optionsTanggal);
+      const optionsTanggal = { day: 'numeric', month: 'long', year: 'numeric' };
+      const tanggalFormatted = selectedDate.toLocaleDateString('id-ID', optionsTanggal);
 
-    document.getElementById('namaOut').textContent = nama;
-    document.getElementById('tanggalOut').textContent = `${hari}, ${tanggalFormatted} (${jadwal.value})`;
-    document.getElementById('emailOut').textContent = email;
+      document.getElementById('namaOut').textContent = nama;
+      document.getElementById('tanggalOut').textContent = `${hari}, ${tanggalFormatted} (${jadwal.value})`;
+      document.getElementById('emailOut').textContent = email;
 
-    const konfirmasi = document.getElementById('konfirmasi');
-    konfirmasi.classList.add('show');
-    konfirmasi.scrollIntoView({ behavior: 'smooth' });
-  });
-</script>
+      const konfirmasi = document.getElementById('konfirmasi');
+      konfirmasi.classList.add('show');
+      konfirmasi.scrollIntoView({ behavior: 'smooth' });
+    });
+  </script>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
