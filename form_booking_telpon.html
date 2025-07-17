@@ -189,7 +189,7 @@
 </footer>
 
 <script>
-const bookedSlots = {
+ const bookedSlots = {
   '2025-07-22': ['10.00'],                  
   '2025-07-23': ['13.00'],                  
   '2025-07-24': ['09.00'],                  
@@ -200,42 +200,34 @@ const bookedSlots = {
   const dateInput = document.getElementById('tanggal');
   const timeSlots = document.querySelectorAll('input[name="jadwal"]');
 
-  // 2. Fungsi untuk memperbarui ketersediaan jadwal
   function updateAvailability() {
     const selectedDate = dateInput.value;
-    const slotsForDate = bookedSlots[selectedDate] || []; // Ambil jadwal terisi, atau array kosong jika tanggal bebas
+    const slotsForDate = bookedSlots[selectedDate] || [];
 
     timeSlots.forEach(slot => {
-      const label = slot.parentElement; // Ambil elemen <label> pembungkusnya
+      const label = slot.parentElement; 
       const isBooked = slotsForDate.includes(slot.value);
 
       if (isBooked) {
-        slot.disabled = true; // Nonaktifkan radio button
+        slot.disabled = true;
         if (slot.checked) {
-          slot.checked = false; // Batalkan pilihan jika slot ini sedang dipilih
+          slot.checked = false;
         }
-        label.classList.add('booked'); // Tambahkan class 'booked' untuk styling
+        label.classList.add('booked');
       } else {
-        slot.disabled = false; // Aktifkan radio button
-        label.classList.remove('booked'); // Hapus class 'booked'
+        slot.disabled = false;
+        label.classList.remove('booked');
       }
     });
   }
 
-  // 3. Panggil fungsi saat tanggal berubah atau form di-reset
   dateInput.addEventListener('change', updateAvailability);
   document.getElementById('bookingForm').addEventListener('reset', () => {
-    // Beri sedikit jeda agar form selesai di-reset sebelum memperbarui
     setTimeout(updateAvailability, 0);
   });
   
-  // Panggil sekali saat halaman dimuat untuk inisialisasi
   updateAvailability();
 
-  // --- AKHIR BAGIAN BARU ---
-
-
-  // Kode form submission Anda (tidak ada perubahan di sini)
   document.getElementById('bookingForm').addEventListener('submit', function (e) {
     e.preventDefault();
 
@@ -244,14 +236,12 @@ const bookedSlots = {
     const tanggal = document.getElementById('tanggal').value;
     const jadwal = document.querySelector('input[name="jadwal"]:checked');
 
-    // Validasi email @students.amikom.ac.id
     const emailPattern = /^[a-zA-Z0-9._%+-]+@students\.amikom\.ac\.id$/;
     if (!emailPattern.test(email)) {
       alert('Gunakan email @students.amikom.ac.id yang valid.');
       return;
     }
 
-    // Validasi tanggal tidak boleh di masa lalu
     const today = new Date();
     const selectedDate = new Date(tanggal);
     today.setHours(0, 0, 0, 0);
@@ -266,14 +256,12 @@ const bookedSlots = {
       return;
     }
 
-    // Konversi tanggal ke format hari, tanggal lokal
     const hariIndo = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
     const hari = hariIndo[selectedDate.getDay()];
 
     const optionsTanggal = { day: 'numeric', month: 'long', year: 'numeric' };
     const tanggalFormatted = selectedDate.toLocaleDateString('id-ID', optionsTanggal);
 
-    // Output ke elemen konfirmasi
     document.getElementById('namaOut').textContent = nama;
     document.getElementById('tanggalOut').textContent = `${hari}, ${tanggalFormatted} (${jadwal.value})`;
     document.getElementById('emailOut').textContent = email;
@@ -283,3 +271,6 @@ const bookedSlots = {
     konfirmasi.scrollIntoView({ behavior: 'smooth' });
   });
 </script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
